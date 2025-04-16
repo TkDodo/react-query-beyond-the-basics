@@ -62,8 +62,8 @@ function BookSearchOverview({
   setPage: (page: number) => void
 }) {
   const query = useQuery({
-    queryKey: ['books', 'list', search],
-    queryFn: () => getBooks({ search }),
+    queryKey: ['books', 'list', { search, page }],
+    queryFn: () => getBooks({ search, page }),
     staleTime: 2 * 60 * 1000,
   })
 
