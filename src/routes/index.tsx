@@ -83,7 +83,7 @@ function BookSearchOverview({
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {query.data.docs.map((book) => (
-          <BookSearchItem key={book.title} {...book} onClick={setId} />
+          <BookSearchItem key={book.id} {...book} onClick={setId} />
         ))}
       </div>
 
