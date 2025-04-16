@@ -2,10 +2,11 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { SearchForm } from '@/ui-components/search-form'
 import { Header } from '@/ui-components/header'
+import { Pagination } from '@/ui-components/pagination'
 import { BookSearchItem } from '@/ui-components/book-search-item'
 import { BookDetailItem } from '@/ui-components/book-detail-item'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { bookQueries } from '@/api/openlibrary'
+import { skipToken, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   EmptyState,
   ErrorState,
@@ -18,6 +19,7 @@ export const Route = createFileRoute('/')({
 
 function App() {
   const [search, setSearch] = useState('')
+  const [page, setPage] = useState(1)
   const [id, setId] = useState<string>()
 
   if (id) {
@@ -35,7 +37,12 @@ function App() {
         <SearchForm onSearch={setSearch} defaultValue={search} />
       </Header>
       {search ? (
-        <BookSearchOverview search={search} setId={setId} />
+        <BookSearchOverview
+          search={search}
+          setId={setId}
+          page={page}
+          setPage={setPage}
+        />
       ) : (
         <EmptyState />
       )}
@@ -44,11 +51,15 @@ function App() {
 }
 
 function BookSearchOverview({
+  page,
+  setPage,
   setId,
   search,
 }: {
   search: string
   setId: (id: string) => void
+  page: number
+  setPage: (page: number) => void
 }) {
   const queryClient = useQueryClient()
   const query = useQuery(bookQueries.list(search))
@@ -70,7 +81,7 @@ function BookSearchOverview({
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {query.data.docs.map((book) => (
           <BookSearchItem
-            key={book.title}
+            key={book.id}
             {...book}
             onClick={setId}
             onMouseEnter={() => {
@@ -82,6 +93,12 @@ function BookSearchOverview({
           />
         ))}
       </div>
+
+      <Pagination
+        page={page}
+        setPage={setPage}
+        maxPages={Math.ceil(query.data.numFound / limit)}
+      />
     </div>
   )
 }
