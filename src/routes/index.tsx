@@ -6,7 +6,7 @@ import { Pagination } from '@/ui-components/pagination'
 import { BookSearchItem } from '@/ui-components/book-search-item'
 import { BookDetailItem } from '@/ui-components/book-detail-item'
 import { skipToken, useQuery } from '@tanstack/react-query'
-import { getAuthor, getBook, getBooks } from '@/api/openlibrary'
+import { getAuthor, getBook, getBooks, limit } from '@/api/openlibrary'
 import {
   EmptyState,
   ErrorState,
@@ -90,7 +90,7 @@ function BookSearchOverview({
       <Pagination
         page={page}
         setPage={setPage}
-        maxPages={Math.ceil(query.data.numFound / 6)}
+        maxPages={Math.ceil(query.data.numFound / limit)}
       />
     </div>
   )

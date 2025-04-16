@@ -1,6 +1,6 @@
 import ky from 'ky'
 
-const limit = '6'
+export const limit = 6
 
 export type BookSearchItem = Awaited<
   ReturnType<typeof getBooks>
@@ -8,10 +8,17 @@ export type BookSearchItem = Awaited<
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-export async function getBooks({ search }: { search: string }) {
+export async function getBooks({
+  search,
+  page,
+}: {
+  search: string
+  page: number
+}) {
   const params = new URLSearchParams({
     q: search,
-    limit,
+    page: String(page),
+    limit: String(limit),
     has_fulltext: 'true',
     fields: 'key,title,author_name,author_key,first_publish_year,cover_i',
   })
@@ -19,8 +26,6 @@ export async function getBooks({ search }: { search: string }) {
     .get(`https://openlibrary.org/search.json?${params.toString()}`)
     .json<{
       numFound: number
-      start: number
-      offset: number
       docs: Array<{
         key: string
         title: string
