@@ -1,9 +1,10 @@
 import { CoverImage } from '@/ui-components/cover-image'
 import type { BookSearchItem } from '@/api/openlibrary'
 
-type Props = BookSearchItem & {
-  onClick: (id: string) => void
-}
+type Props = BookSearchItem &
+  Omit<React.ComponentProps<'a'>, 'href' | 'onClick' | 'className'> & {
+    onClick: (id: string) => void
+  }
 
 export function BookSearchItem({
   id,
@@ -12,6 +13,7 @@ export function BookSearchItem({
   title,
   publishYear,
   onClick,
+  ...props
 }: Props) {
   return (
     <a
@@ -21,6 +23,7 @@ export function BookSearchItem({
         onClick(id)
       }}
       className="group block rounded-xl border border-transparent transition-transform duration-200 ease-out hover:-translate-y-1 hover:border-indigo-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+      {...props}
     >
       <div className="flex items-start space-x-4 rounded-xl bg-gray-800 p-4 shadow transition group-hover:shadow-lg">
         <CoverImage id={String(coverId)} title={title} />
