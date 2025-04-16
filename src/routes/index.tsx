@@ -63,7 +63,11 @@ function BookSearchOverview({
   setPage: (page: number) => void
 }) {
   const queryClient = useQueryClient()
-  const query = useQuery(bookQueries.list({ search, page }))
+  const query = useQuery({
+    ...bookQueries.list({ search, page }),
+    placeholderData: (previousData, previousQuery) =>
+      previousQuery?.queryHash.includes(search) ? previousData : undefined,
+  })
 
   if (query.status === 'pending') {
     return <PendingState />
@@ -83,7 +87,10 @@ function BookSearchOverview({
         {query.data.numFound.toString()} records found
       </div>
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div
+        className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        style={{ opacity: query.isPlaceholderData ? 0.5 : 1 }}
+      >
         {query.data.docs.map((book) => (
           <BookSearchItem
             key={book.id}
