@@ -1,4 +1,5 @@
 import ky from 'ky'
+import { queryOptions, skipToken } from '@tanstack/react-query'
 
 const limit = '6'
 
@@ -8,7 +9,7 @@ export type BookSearchItem = Awaited<
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-export async function getBooks({ search }: { search: string }) {
+async function getBooks({ search }: { search: string }) {
   const params = new URLSearchParams({
     q: search,
     limit,
@@ -47,7 +48,7 @@ export async function getBooks({ search }: { search: string }) {
 
 export type BookDetailItem = Awaited<ReturnType<typeof getBook>>
 
-export async function getBook(id: string) {
+async function getBook(id: string) {
   const response = await ky.get(`https://openlibrary.org${id}.json`).json<{
     title: string
     description?: string | { value: string }
@@ -72,7 +73,7 @@ export async function getBook(id: string) {
 
 export type Author = Awaited<ReturnType<typeof getAuthor>>
 
-export async function getAuthor(id: string) {
+async function getAuthor(id: string) {
   const response = await ky.get(`https://openlibrary.org${id}.json`).json<{
     personal_name: string
     links?: Array<{ url: string }>
@@ -86,4 +87,26 @@ export async function getAuthor(id: string) {
       url: link.url,
     }))[0]?.url,
   }
+}
+
+export const bookQueries = {
+  all: () => ['books'],
+  list: (search: string) =>
+    queryOptions({
+      queryKey: [...bookQueries.all(), 'list', search],
+      queryFn: () => getBooks({ search }),
+      staleTime: 2 * 60 * 1000,
+    }),
+  detail: (bookId: string) =>
+    queryOptions({
+      queryKey: [...bookQueries.all(), 'detail', bookId],
+      queryFn: () => getBook(bookId),
+      staleTime: 2 * 60 * 1000,
+    }),
+  author: (authorId: string | undefined) =>
+    queryOptions({
+      queryKey: [...bookQueries.all(), 'author', authorId],
+      queryFn: authorId ? () => getAuthor(authorId) : skipToken,
+      staleTime: 20 * 60 * 1000,
+    }),
 }

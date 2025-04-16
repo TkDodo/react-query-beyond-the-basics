@@ -4,8 +4,8 @@ import { SearchForm } from '@/ui-components/search-form'
 import { Header } from '@/ui-components/header'
 import { BookSearchItem } from '@/ui-components/book-search-item'
 import { BookDetailItem } from '@/ui-components/book-detail-item'
-import { skipToken, useQuery } from '@tanstack/react-query'
-import { getAuthor, getBook, getBooks } from '@/api/openlibrary'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { bookQueries } from '@/api/openlibrary'
 import {
   EmptyState,
   ErrorState,
@@ -50,11 +50,8 @@ function BookSearchOverview({
   search: string
   setId: (id: string) => void
 }) {
-  const query = useQuery({
-    queryKey: ['books', 'list', search],
-    queryFn: () => getBooks({ search }),
-    staleTime: 2 * 60 * 1000,
-  })
+  const queryClient = useQueryClient()
+  const query = useQuery(bookQueries.list(search))
 
   if (query.status === 'pending') {
     return <PendingState />
@@ -72,7 +69,17 @@ function BookSearchOverview({
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {query.data.docs.map((book) => (
-          <BookSearchItem key={book.title} {...book} onClick={setId} />
+          <BookSearchItem
+            key={book.title}
+            {...book}
+            onClick={setId}
+            onMouseEnter={() => {
+              void queryClient.prefetchQuery(bookQueries.detail(book.id))
+            }}
+            onFocus={() => {
+              void queryClient.prefetchQuery(bookQueries.detail(book.id))
+            }}
+          />
         ))}
       </div>
     </div>
@@ -86,19 +93,11 @@ function BookDetail({
   id: string
   setId: (id: string | undefined) => void
 }) {
-  const bookQuery = useQuery({
-    queryKey: ['books', 'detail', id],
-    queryFn: () => getBook(id),
-    staleTime: 2 * 60 * 1000,
-  })
+  const bookQuery = useQuery(bookQueries.detail(id))
 
   const authorId = bookQuery.data?.author
 
-  const authorQuery = useQuery({
-    queryKey: ['books', 'author', authorId],
-    queryFn: authorId ? () => getAuthor(authorId) : skipToken,
-    staleTime: 20 * 60 * 1000,
-  })
+  const authorQuery = useQuery(bookQueries.author(authorId))
 
   if (bookQuery.status === 'pending') {
     return <PendingState />
