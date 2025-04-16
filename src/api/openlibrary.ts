@@ -1,7 +1,7 @@
 import ky from 'ky'
 import { queryOptions, skipToken } from '@tanstack/react-query'
 
-const limit = '6'
+export const limit = 6
 
 export type BookSearchItem = Awaited<
   ReturnType<typeof getBooks>
@@ -9,10 +9,11 @@ export type BookSearchItem = Awaited<
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-async function getBooks({ search }: { search: string }) {
+async function getBooks({ search, page }: { search: string; page: number }) {
   const params = new URLSearchParams({
     q: search,
-    limit,
+    page: String(page),
+    limit: String(limit),
     has_fulltext: 'true',
     fields: 'key,title,author_name,author_key,first_publish_year,cover_i',
   })
@@ -20,8 +21,6 @@ async function getBooks({ search }: { search: string }) {
     .get(`https://openlibrary.org/search.json?${params.toString()}`)
     .json<{
       numFound: number
-      start: number
-      offset: number
       docs: Array<{
         key: string
         title: string
@@ -97,10 +96,10 @@ async function getAuthor(id: string) {
 
 export const bookQueries = {
   all: () => ['books'],
-  list: (search: string) =>
+  list: (params: Parameters<typeof getBooks>[0]) =>
     queryOptions({
-      queryKey: [...bookQueries.all(), 'list', search],
-      queryFn: () => getBooks({ search }),
+      queryKey: [...bookQueries.all(), 'list', params],
+      queryFn: () => getBooks(params),
       staleTime: 2 * 60 * 1000,
     }),
   detail: (bookId: string) =>
