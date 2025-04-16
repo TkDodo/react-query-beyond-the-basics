@@ -92,7 +92,7 @@ function BookDetail({
     staleTime: 2 * 60 * 1000,
   })
 
-  const authorId = bookQuery.data?.author
+  const authorId = bookQuery.data?.authorId
 
   const authorQuery = useQuery({
     queryKey: ['books', 'author', authorId],
