@@ -72,7 +72,7 @@ export async function getBook(id: string) {
       ? { covers: response.covers.filter((cover) => cover > 0) }
       : undefined),
     ...(response.links ? { links: response.links } : undefined),
-    author: response.authors[0].author.key,
+    authorId: response.authors[0].author.key,
   }
 }
 
