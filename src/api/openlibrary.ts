@@ -53,7 +53,7 @@ export async function getBook(id: string) {
   const response = await ky.get(`https://openlibrary.org${id}.json`).json<{
     title: string
     description?: string | { value: string }
-    covers?: Array<number>
+    covers: Array<number>
     links?: Array<{ title: string; url: string }>
     authors: [{ author: { key: string } }]
   }>()
@@ -70,9 +70,7 @@ export async function getBook(id: string) {
     ...(description
       ? { description: description.replaceAll(String.raw`\n`, '\n') }
       : undefined),
-    ...(response.covers
-      ? { covers: response.covers.filter((cover) => cover > 0) }
-      : undefined),
+    covers: response.covers.filter((cover) => cover > 0),
     ...(response.links ? { links: response.links } : undefined),
     authorId: response.authors[0].author.key,
   }
