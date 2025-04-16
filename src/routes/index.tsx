@@ -26,7 +26,7 @@ function App() {
     return (
       <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
         <Header />
-        <BookDetail id={id} setId={setId} search={search} />
+        <BookDetail id={id} setId={setId} search={search} page={page} />
       </div>
     )
   }
@@ -107,9 +107,11 @@ function BookDetail({
   setId,
   id,
   search,
+  page,
 }: {
   id: string
   search: string
+  page: number
   setId: (id: string | undefined) => void
 }) {
   const queryClient = useQueryClient()
@@ -117,7 +119,7 @@ function BookDetail({
     ...bookQueries.detail(id),
     placeholderData: () => {
       const listData = queryClient
-        .getQueryData(bookQueries.list(search).queryKey)
+        .getQueryData(bookQueries.list({ search, page }).queryKey)
         ?.docs.find((book) => book.id === id)
 
       return listData
@@ -136,7 +138,7 @@ function BookDetail({
     ...bookQueries.author(authorId),
     placeholderData: () => {
       const listData = queryClient
-        .getQueryData(bookQueries.list(search).queryKey)
+        .getQueryData(bookQueries.list({ search, page }).queryKey)
         ?.docs.find((book) => book.id === id)
 
       return listData
