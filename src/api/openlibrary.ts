@@ -40,7 +40,7 @@ export async function getBooks({ search }: { search: string }) {
       id: doc.key,
       coverId: doc.cover_i,
       authorName: doc.author_name[0],
-      authorId: doc.author_key[0],
+      authorId: `/authors/${doc.author_key[0]}`,
       title: doc.title,
       publishYear: doc.first_publish_year,
     })),
