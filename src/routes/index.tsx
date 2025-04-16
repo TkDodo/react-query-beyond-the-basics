@@ -5,8 +5,8 @@ import { Header } from '@/ui-components/header'
 import { Pagination } from '@/ui-components/pagination'
 import { BookSearchItem } from '@/ui-components/book-search-item'
 import { BookDetailItem } from '@/ui-components/book-detail-item'
-import { bookQueries } from '@/api/openlibrary'
-import { skipToken, useQuery, useQueryClient } from '@tanstack/react-query'
+import { bookQueries, limit } from '@/api/openlibrary'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   EmptyState,
   ErrorState,
@@ -62,7 +62,7 @@ function BookSearchOverview({
   setPage: (page: number) => void
 }) {
   const queryClient = useQueryClient()
-  const query = useQuery(bookQueries.list(search))
+  const query = useQuery(bookQueries.list({ search, page }))
 
   if (query.status === 'pending') {
     return <PendingState />

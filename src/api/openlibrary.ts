@@ -9,13 +9,7 @@ export type BookSearchItem = Awaited<
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-async function getBooks({
-  search,
-  page,
-}: {
-  search: string
-  page: number
-}) {
+async function getBooks({ search, page }: { search: string; page: number }) {
   const params = new URLSearchParams({
     q: search,
     page: String(page),
@@ -102,10 +96,10 @@ async function getAuthor(id: string) {
 
 export const bookQueries = {
   all: () => ['books'],
-  list: (search: string) =>
+  list: (params: Parameters<typeof getBooks>[0]) =>
     queryOptions({
-      queryKey: [...bookQueries.all(), 'list', search],
-      queryFn: () => getBooks({ search }),
+      queryKey: [...bookQueries.all(), 'list', params],
+      queryFn: () => getBooks(params),
       staleTime: 2 * 60 * 1000,
     }),
   detail: (bookId: string) =>
