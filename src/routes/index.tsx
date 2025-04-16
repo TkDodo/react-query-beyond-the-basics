@@ -24,7 +24,7 @@ function App() {
     return (
       <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
         <Header />
-        <BookDetail id={id} setId={setId} />
+        <BookDetail id={id} setId={setId} search={search} />
       </div>
     )
   }
@@ -89,15 +89,47 @@ function BookSearchOverview({
 function BookDetail({
   setId,
   id,
+  search,
 }: {
   id: string
+  search: string
   setId: (id: string | undefined) => void
 }) {
-  const bookQuery = useQuery(bookQueries.detail(id))
+  const queryClient = useQueryClient()
+  const bookQuery = useQuery({
+    ...bookQueries.detail(id),
+    placeholderData: () => {
+      const listData = queryClient
+        .getQueryData(bookQueries.list(search).queryKey)
+        ?.docs.find((book) => book.id === id)
+
+      return listData
+        ? {
+            title: listData.title,
+            authorId: listData.authorId,
+            covers: [listData.coverId],
+          }
+        : undefined
+    },
+  })
 
   const authorId = bookQuery.data?.authorId
 
-  const authorQuery = useQuery(bookQueries.author(authorId))
+  const authorQuery = useQuery({
+    ...bookQueries.author(authorId),
+    placeholderData: () => {
+      const listData = queryClient
+        .getQueryData(bookQueries.list(search).queryKey)
+        ?.docs.find((book) => book.id === id)
+
+      return listData
+        ? {
+            name: listData.authorName,
+            link: undefined,
+          }
+        : undefined
+    },
+  })
 
   if (bookQuery.status === 'pending') {
     return <PendingState />
