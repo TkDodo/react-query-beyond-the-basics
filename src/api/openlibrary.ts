@@ -63,9 +63,9 @@ async function getBook(id: string) {
   await sleep(250)
 
   const description =
-    typeof response.description === 'string'
+    (typeof response.description === 'string'
       ? response.description
-      : response.description?.value
+      : response.description?.value) ?? 'No description available'
 
   return {
     title: response.title,
