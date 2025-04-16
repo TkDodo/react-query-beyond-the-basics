@@ -24,8 +24,8 @@ async function getBooks({ search, page }: { search: string; page: number }) {
       docs: Array<{
         key: string
         title: string
-        author_name: [string, ...Array<string>]
-        author_key: [string, ...Array<string>]
+        author_name?: Array<string>
+        author_key?: Array<string>
         coverId: string
         first_publish_year: number
         cover_i: number
@@ -39,8 +39,10 @@ async function getBooks({ search, page }: { search: string; page: number }) {
     docs: response.docs.map((doc) => ({
       id: doc.key,
       coverId: doc.cover_i,
-      authorName: doc.author_name[0],
-      authorId: `/authors/${doc.author_key[0]}`,
+      authorName: doc.author_name?.[0],
+      authorId: doc.author_key?.[0]
+        ? `/authors/${doc.author_key[0]}`
+        : undefined,
       title: doc.title,
       publishYear: doc.first_publish_year,
     })),
@@ -53,9 +55,9 @@ async function getBook(id: string) {
   const response = await ky.get(`https://openlibrary.org${id}.json`).json<{
     title: string
     description?: string | { value: string }
-    covers: Array<number>
+    covers?: Array<number>
     links?: Array<{ title: string; url: string }>
-    authors: [{ author: { key: string } }]
+    authors?: Array<{ author: { key: string } }>
   }>()
 
   await sleep(250)
@@ -70,9 +72,9 @@ async function getBook(id: string) {
     ...(description
       ? { description: description.replaceAll(String.raw`\n`, '\n') }
       : undefined),
-    covers: response.covers.filter((cover) => cover > 0),
+    covers: response.covers?.filter((cover) => cover > 0) ?? [],
     ...(response.links ? { links: response.links } : undefined),
-    authorId: response.authors[0].author.key,
+    authorId: response.authors?.[0]?.author.key,
   }
 }
 
