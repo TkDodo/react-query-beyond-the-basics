@@ -48,7 +48,7 @@ export function BookDetailItem({
           )}
         </p>
 
-        {covers && covers.length > 0 && (
+        {covers.length > 0 && (
           <div className="mb-6 flex space-x-4">
             {covers.slice(0, 5).map((src) => (
               <CoverImage key={src} id={String(src)} title={title} />
@@ -56,11 +56,19 @@ export function BookDetailItem({
           </div>
         )}
 
-        <div className="prose mb-4 max-w-none whitespace-pre-line text-gray-300">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {description}
-          </ReactMarkdown>
-        </div>
+        {description ? (
+          <div className="prose mb-4 max-w-none whitespace-pre-line text-gray-300">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {description}
+            </ReactMarkdown>
+          </div>
+        ) : (
+          <div className="rounded-xl bg-gray-800 p-4 shadow transition hover:shadow-lg">
+            <div className="mb-4 h-20 w-full rounded bg-gray-700"></div>
+            <div className="mb-2 h-4 w-3/4 rounded bg-gray-600"></div>
+            <div className="h-4 w-1/2 rounded bg-gray-600"></div>
+          </div>
+        )}
       </div>
 
       {links && links.length > 0 && (

@@ -9,6 +9,7 @@ type Props = BookSearchItem &
 export function BookSearchItem({
   id,
   coverId,
+  authorId,
   authorName,
   title,
   publishYear,
