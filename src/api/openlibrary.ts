@@ -13,7 +13,7 @@ export async function getBooks({ search }: { search: string }) {
     q: search,
     limit,
     has_fulltext: 'true',
-    fields: 'key,title,author_name,first_publish_year,cover_i',
+    fields: 'key,title,author_name,author_key,first_publish_year,cover_i',
   })
   const response = await ky
     .get(`https://openlibrary.org/search.json?${params.toString()}`)
@@ -25,6 +25,7 @@ export async function getBooks({ search }: { search: string }) {
         key: string
         title: string
         author_name: [string, ...Array<string>]
+        author_key: [string, ...Array<string>]
         coverId: string
         first_publish_year: number
         cover_i: number
@@ -39,6 +40,7 @@ export async function getBooks({ search }: { search: string }) {
       id: doc.key,
       coverId: doc.cover_i,
       authorName: doc.author_name[0],
+      authorId: doc.author_key[0],
       title: doc.title,
       publishYear: doc.first_publish_year,
     })),
