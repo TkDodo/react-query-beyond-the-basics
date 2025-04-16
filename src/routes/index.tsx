@@ -146,7 +146,7 @@ function BookDetail({
         .getQueryData(bookQueries.list({ search, page }).queryKey)
         ?.docs.find((book) => book.id === id)
 
-      return listData
+      return listData?.authorName
         ? {
             name: listData.authorName,
             link: undefined,
