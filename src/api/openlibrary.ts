@@ -57,6 +57,8 @@ async function getBook(id: string) {
     authors: [{ author: { key: string } }]
   }>()
 
+  await sleep(250)
+
   const description =
     typeof response.description === 'string'
       ? response.description
@@ -64,9 +66,13 @@ async function getBook(id: string) {
 
   return {
     title: response.title,
-    description: description?.replaceAll(String.raw`\r\n`, '\n'),
-    covers: response.covers?.filter((cover) => cover > 0),
-    links: response.links,
+    ...(description
+      ? { description: description.replaceAll(String.raw`\n`, '\n') }
+      : undefined),
+    ...(response.covers
+      ? { covers: response.covers.filter((cover) => cover > 0) }
+      : undefined),
+    ...(response.links ? { links: response.links } : undefined),
     author: response.authors[0].author.key,
   }
 }
