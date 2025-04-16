@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { SearchForm } from '@/ui-components/search-form'
 import { Header } from '@/ui-components/header'
+import { Pagination } from '@/ui-components/pagination'
 import { BookSearchItem } from '@/ui-components/book-search-item'
 import { BookDetailItem } from '@/ui-components/book-detail-item'
 import { skipToken, useQuery } from '@tanstack/react-query'
@@ -18,6 +19,7 @@ export const Route = createFileRoute('/')({
 
 function App() {
   const [search, setSearch] = useState('')
+  const [page, setPage] = useState(1)
   const [id, setId] = useState<string>()
 
   if (id) {
@@ -35,7 +37,12 @@ function App() {
         <SearchForm onSearch={setSearch} defaultValue={search} />
       </Header>
       {search ? (
-        <BookSearchOverview search={search} setId={setId} />
+        <BookSearchOverview
+          search={search}
+          setId={setId}
+          page={page}
+          setPage={setPage}
+        />
       ) : (
         <EmptyState />
       )}
@@ -44,11 +51,15 @@ function App() {
 }
 
 function BookSearchOverview({
+  page,
+  setPage,
   setId,
   search,
 }: {
   search: string
   setId: (id: string) => void
+  page: number
+  setPage: (page: number) => void
 }) {
   const query = useQuery({
     queryKey: ['books', 'list', search],
@@ -75,6 +86,12 @@ function BookSearchOverview({
           <BookSearchItem key={book.title} {...book} onClick={setId} />
         ))}
       </div>
+
+      <Pagination
+        page={page}
+        setPage={setPage}
+        maxPages={Math.ceil(query.data.numFound / 6)}
+      />
     </div>
   )
 }
