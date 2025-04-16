@@ -10,6 +10,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   EmptyState,
   ErrorState,
+  NoResultsState,
   PendingState,
 } from '@/ui-components/search-states'
 
@@ -70,6 +71,10 @@ function BookSearchOverview({
 
   if (query.status === 'error') {
     return <ErrorState error={query.error} />
+  }
+
+  if (query.data.numFound === 0) {
+    return <NoResultsState />
   }
 
   return (
