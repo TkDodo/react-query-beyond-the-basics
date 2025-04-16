@@ -3,7 +3,7 @@ import remarkGfm from 'remark-gfm'
 import { CoverImage } from '@/ui-components/cover-image'
 import type { Author, BookDetailItem } from '@/api/openlibrary'
 
-type Props = Omit<BookDetailItem, 'author'> & {
+type Props = Omit<BookDetailItem, 'authorId'> & {
   onBack: () => void
   author?: Author
 }

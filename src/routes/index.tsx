@@ -95,7 +95,7 @@ function BookDetail({
 }) {
   const bookQuery = useQuery(bookQueries.detail(id))
 
-  const authorId = bookQuery.data?.author
+  const authorId = bookQuery.data?.authorId
 
   const authorQuery = useQuery(bookQueries.author(authorId))
 
