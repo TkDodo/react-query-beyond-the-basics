@@ -9,14 +9,14 @@ export type BookSearchItem = Awaited<
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export async function getBooks({
-  search,
+  filter,
   page,
 }: {
-  search: string
+  filter: string
   page: number
 }) {
   const params = new URLSearchParams({
-    q: search,
+    q: filter,
     page: String(page),
     limit: String(limit),
     has_fulltext: 'true',
