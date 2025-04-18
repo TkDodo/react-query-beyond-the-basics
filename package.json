@@ -13,13 +13,17 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.6",
+    "@tanstack/query-async-storage-persister": "^5.74.4",
     "@tanstack/react-query": "^5.74.0",
     "@tanstack/react-query-devtools": "^5.74.0",
+    "@tanstack/react-query-persist-client": "^5.74.4",
     "@tanstack/react-router": "^1.114.3",
     "@tanstack/react-router-devtools": "^1.114.3",
     "@tanstack/router-plugin": "^1.114.3",
+    "idb-keyval": "^6.2.1",
     "ky": "^1.8.1",
     "lucide-react": "^0.488.0",
+    "msw": "^2.7.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-markdown": "^10.1.0",
@@ -37,11 +41,15 @@
     "eslint-import-resolver-typescript": "^4.3.2",
     "eslint-plugin-import-x": "^4.10.3",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-unicorn": "^58.0.0",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.29.1",
     "vite": "^6.1.0"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }
