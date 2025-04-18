@@ -103,6 +103,9 @@ export const bookQueries = {
       queryKey: [...bookQueries.all(), 'list', params],
       queryFn: () => getBooks(params),
       staleTime: 2 * 60 * 1000,
+      meta: {
+        persist: true,
+      },
     }),
   detail: (bookId: string) =>
     queryOptions({

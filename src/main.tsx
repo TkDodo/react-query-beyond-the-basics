@@ -1,14 +1,23 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { get, set, del } from 'idb-keyval'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
 
 import './styles.css'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { defaultShouldDehydrateQuery, QueryClient } from '@tanstack/react-query'
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      gcTime: 1000 * 60 * 60, // 1 hour
+    },
+  },
+})
 
 // Create a new router instance
 const router = createRouter({
@@ -32,6 +41,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+declare module '@tanstack/react-query' {
+  interface Register {
+    queryMeta: {
+      persist?: boolean
+    }
+  }
+}
+
+const persister = createAsyncStoragePersister({
+  storage: {
+    getItem: get,
+    setItem: set,
+    removeItem: del,
+  },
+})
+
 // Render the app
 const rootElement = document.querySelector('#app')
 if (rootElement && !rootElement.innerHTML) {
@@ -39,9 +64,19 @@ if (rootElement && !rootElement.innerHTML) {
   // await (await import('@/server/handlers')).worker.start()
   root.render(
     <StrictMode>
-      <QueryClientProvider client={queryClient}>
+      <PersistQueryClientProvider
+        persistOptions={{
+          persister,
+          dehydrateOptions: {
+            shouldDehydrateQuery: (query) =>
+              defaultShouldDehydrateQuery(query) &&
+              query.meta?.persist === true,
+          },
+        }}
+        client={queryClient}
+      >
         <RouterProvider router={router} />
-      </QueryClientProvider>
+      </PersistQueryClientProvider>
     </StrictMode>,
   )
 }
