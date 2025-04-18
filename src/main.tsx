@@ -7,7 +7,6 @@ import { routeTree } from './routeTree.gen'
 
 import './styles.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { worker } from '@/server/handlers'
 
 const queryClient = new QueryClient()
 
@@ -34,7 +33,7 @@ declare module '@tanstack/react-router' {
 const rootElement = document.querySelector('#app')
 if (rootElement && !rootElement.innerHTML) {
   const root = createRoot(rootElement)
-  await worker.start()
+  // await (await import('@/server/handlers')).worker.start()
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
