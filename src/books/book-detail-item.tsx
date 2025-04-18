@@ -2,9 +2,9 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { CoverImage } from '@/books/cover-image'
 import type { Author, BookDetailItem } from '@/api/openlibrary'
+import { Link } from '@tanstack/react-router'
 
 type Props = Omit<BookDetailItem, 'authorId'> & {
-  onBack: () => void
   author?: Author
 }
 
@@ -14,22 +14,17 @@ export function BookDetailItem({
   description,
   links,
   covers,
-  onBack,
 }: Props) {
   const authorName = author?.name ?? '...'
 
   return (
     <div className="mx-auto max-w-3xl">
-      <a
-        href="#"
-        onClick={(e) => {
-          e.preventDefault()
-          onBack()
-        }}
+      <Link
+        to="/"
         className="mb-4 inline-block rounded text-sm text-indigo-400 hover:underline focus:ring-2 focus:ring-indigo-400 focus:outline-none"
       >
         ← Back to search
-      </a>
+      </Link>
       <div className="rounded-xl bg-gray-800 p-6 text-gray-100 shadow-md">
         <h2 className="text-2xl font-bold text-white">{title}</h2>
 

@@ -1,10 +1,9 @@
 import { CoverImage } from '@/books/cover-image'
 import type { BookSearchItem } from '@/api/openlibrary'
+import { Link } from '@tanstack/react-router'
 
 type Props = BookSearchItem &
-  Omit<React.ComponentProps<'a'>, 'href' | 'onClick' | 'className'> & {
-    onClick: (id: string) => void
-  }
+  Omit<React.ComponentProps<'a'>, 'href' | 'className'>
 
 export function BookSearchItem({
   id,
@@ -13,16 +12,12 @@ export function BookSearchItem({
   authorName,
   title,
   publishYear,
-  onClick,
   ...props
 }: Props) {
   return (
-    <a
-      href="#"
-      onClick={(event) => {
-        event.preventDefault()
-        onClick(id)
-      }}
+    <Link
+      to="/$id"
+      params={{ id }}
       className="group block rounded-xl border border-transparent transition-transform duration-200 ease-out hover:-translate-y-1 hover:border-indigo-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
       {...props}
     >
@@ -36,6 +31,6 @@ export function BookSearchItem({
           </p>
         </div>
       </div>
-    </a>
+    </Link>
   )
 }
