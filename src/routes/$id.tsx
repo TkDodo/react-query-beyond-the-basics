@@ -6,6 +6,9 @@ import { ErrorState, PendingState } from '@/books/search-states'
 import { BookDetailItem } from '@/books/book-detail-item'
 
 export const Route = createFileRoute('/$id')({
+  loader: async ({ params, context }) => {
+    void context.queryClient.prefetchQuery(bookQueries.detail(params.id))
+  },
   component: BookDetail,
 })
 

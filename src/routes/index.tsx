@@ -4,7 +4,7 @@ import { Header } from '@/books/header'
 import { Pagination } from '@/books/pagination'
 import { BookSearchItem } from '@/books/book-search-item'
 import { bookQueries, limit } from '@/api/openlibrary'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import {
   EmptyState,
   ErrorState,
@@ -13,6 +13,10 @@ import {
 } from '@/books/search-states'
 
 export const Route = createFileRoute('/')({
+  loaderDeps: ({ search }) => search,
+  loader: async ({ context, deps }) => {
+    void context.queryClient.prefetchQuery(bookQueries.list(deps))
+  },
   component: App,
 })
 
@@ -39,7 +43,6 @@ function App() {
 
 function BookSearchOverview() {
   const { page, filter } = Route.useSearch()
-  const queryClient = useQueryClient()
   const query = useQuery({
     ...bookQueries.list({ filter, page }),
     placeholderData: (previousData, previousQuery) =>
@@ -69,16 +72,7 @@ function BookSearchOverview() {
         style={{ opacity: query.isPlaceholderData ? 0.5 : 1 }}
       >
         {query.data.docs.map((book) => (
-          <BookSearchItem
-            key={book.id}
-            {...book}
-            onMouseEnter={() => {
-              void queryClient.prefetchQuery(bookQueries.detail(book.id))
-            }}
-            onFocus={() => {
-              void queryClient.prefetchQuery(bookQueries.detail(book.id))
-            }}
-          />
+          <BookSearchItem key={book.id} {...book} />
         ))}
       </div>
 
