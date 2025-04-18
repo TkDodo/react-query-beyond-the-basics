@@ -1,10 +1,10 @@
 import { createFileRoute, retainSearchParams } from '@tanstack/react-router'
 import { useState } from 'react'
-import { SearchForm } from '@/ui-components/search-form'
-import { Header } from '@/ui-components/header'
-import { Pagination } from '@/ui-components/pagination'
-import { BookSearchItem } from '@/ui-components/book-search-item'
-import { BookDetailItem } from '@/ui-components/book-detail-item'
+import { SearchForm } from '@/books/search-form'
+import { Header } from '@/books/header'
+import { Pagination } from '@/books/pagination'
+import { BookSearchItem } from '@/books/book-search-item'
+import { BookDetailItem } from '@/books/book-detail-item'
 import { bookQueries, limit } from '@/api/openlibrary'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { type } from 'arktype'
@@ -13,7 +13,7 @@ import {
   ErrorState,
   NoResultsState,
   PendingState,
-} from '@/ui-components/search-states'
+} from '@/books/search-states'
 
 const schema = type({
   page: 'number = 1',
