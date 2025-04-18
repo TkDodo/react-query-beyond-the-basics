@@ -18,6 +18,7 @@ export function BookSearchItem({
     <Link
       to="/$id"
       params={{ id }}
+      search
       className="group block rounded-xl border border-transparent transition-transform duration-200 ease-out hover:-translate-y-1 hover:border-indigo-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
       {...props}
     >

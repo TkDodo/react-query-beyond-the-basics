@@ -21,6 +21,7 @@ export function BookDetailItem({
     <div className="mx-auto max-w-3xl">
       <Link
         to="/"
+        search
         className="mb-4 inline-block rounded text-sm text-indigo-400 hover:underline focus:ring-2 focus:ring-indigo-400 focus:outline-none"
       >
         ← Back to search

@@ -1,7 +1,6 @@
 import {
   Outlet,
   createRootRouteWithContext,
-  retainSearchParams,
   stripSearchParams,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
@@ -26,10 +25,7 @@ const schema = type({
 export const Route = createRootRouteWithContext<RouterContext>()({
   validateSearch: schema,
   search: {
-    middlewares: [
-      stripSearchParams(defaultValues),
-      retainSearchParams(['page', 'filter']),
-    ],
+    middlewares: [stripSearchParams(defaultValues)],
   },
   component: () => (
     <>
