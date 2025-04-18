@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, retainSearchParams } from '@tanstack/react-router'
 import { useState } from 'react'
 import { SearchForm } from '@/ui-components/search-form'
 import { Header } from '@/ui-components/header'
@@ -7,6 +7,7 @@ import { BookSearchItem } from '@/ui-components/book-search-item'
 import { BookDetailItem } from '@/ui-components/book-detail-item'
 import { bookQueries, limit } from '@/api/openlibrary'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { type } from 'arktype'
 import {
   EmptyState,
   ErrorState,
@@ -14,20 +15,29 @@ import {
   PendingState,
 } from '@/ui-components/search-states'
 
+const schema = type({
+  page: 'number = 1',
+  filter: 'string = ""',
+})
+
 export const Route = createFileRoute('/')({
+  validateSearch: schema,
+  search: {
+    middlewares: [retainSearchParams(['filter', 'page'])],
+  },
   component: App,
 })
 
 function App() {
-  const [filter, setFilter] = useState('')
-  const [page, setPage] = useState(1)
+  const { page, filter } = Route.useSearch()
+  const navigate = Route.useNavigate()
   const [id, setId] = useState<string>()
 
   if (id) {
     return (
       <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
         <Header />
-        <BookDetail id={id} setId={setId} filter={filter} page={page} />
+        <BookDetail id={id} setId={setId} />
       </div>
     )
   }
@@ -35,15 +45,17 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
       <Header>
-        <SearchForm onSearch={setFilter} defaultValue={filter} />
+        <SearchForm
+          onSearch={(newFilter) => {
+            void navigate({
+              search: { filter: newFilter, page: 1 },
+            })
+          }}
+          defaultValue={filter}
+        />
       </Header>
       {filter ? (
-        <BookSearchOverview
-          filter={filter}
-          setId={setId}
-          page={page}
-          setPage={setPage}
-        />
+        <BookSearchOverview filter={filter} setId={setId} page={page} />
       ) : (
         <EmptyState />
       )}
@@ -53,15 +65,14 @@ function App() {
 
 function BookSearchOverview({
   page,
-  setPage,
   setId,
   filter,
 }: {
   filter: string
   setId: (id: string) => void
   page: number
-  setPage: (page: number) => void
 }) {
+  const navigate = Route.useNavigate()
   const queryClient = useQueryClient()
   const query = useQuery({
     ...bookQueries.list({ filter, page }),
@@ -108,7 +119,9 @@ function BookSearchOverview({
 
       <Pagination
         page={page}
-        setPage={setPage}
+        setPage={(newPage) => {
+          void navigate({ search: (prev) => ({ ...prev, page: newPage }) })
+        }}
         maxPages={Math.ceil(query.data.numFound / limit)}
       />
     </div>
@@ -118,14 +131,11 @@ function BookSearchOverview({
 function BookDetail({
   setId,
   id,
-  filter,
-  page,
 }: {
   id: string
-  filter: string
-  page: number
   setId: (id: string | undefined) => void
 }) {
+  const { page, filter } = Route.useSearch()
   const queryClient = useQueryClient()
   const bookQuery = useQuery({
     ...bookQueries.detail(id),
