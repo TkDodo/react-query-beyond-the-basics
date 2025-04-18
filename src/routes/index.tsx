@@ -14,8 +14,11 @@ import {
 
 export const Route = createFileRoute('/')({
   loaderDeps: ({ search }) => search,
-  loader: async ({ context, deps }) => {
-    void context.queryClient.prefetchQuery(bookQueries.list(deps))
+  context: ({ deps }) => ({
+    bookListQuery: bookQueries.list(deps),
+  }),
+  loader: ({ context }) => {
+    void context.queryClient.prefetchQuery(context.bookListQuery)
   },
   component: App,
 })
@@ -42,9 +45,10 @@ function App() {
 }
 
 function BookSearchOverview() {
-  const { page, filter } = Route.useSearch()
+  const { filter } = Route.useSearch()
+  const { bookListQuery } = Route.useRouteContext()
   const query = useQuery({
-    ...bookQueries.list({ filter, page }),
+    ...bookListQuery,
     placeholderData: (previousData, previousQuery) =>
       previousQuery?.queryHash.includes(filter) ? previousData : undefined,
   })
