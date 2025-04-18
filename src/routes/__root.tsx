@@ -8,13 +8,18 @@ interface RouterContext {
   queryClient: QueryClient
 }
 
-const schema = type({
+const arkSchema = type({
   page: 'number > 0 = 1',
   filter: 'string = ""',
 })
 
+// const zodSchema = z.object({
+//   page: z.number().gt(0).default(1),
+//   filter: z.string().default(''),
+// })
+
 export const Route = createRootRouteWithContext<RouterContext>()({
-  validateSearch: schema,
+  validateSearch: arkSchema,
   component: () => (
     <>
       <Outlet />

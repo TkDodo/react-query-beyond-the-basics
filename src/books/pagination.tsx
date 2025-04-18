@@ -13,7 +13,7 @@ export function Pagination({ maxPages }: { maxPages: number }) {
         </span>
       ) : (
         <Link
-          to="/"
+          from="/"
           search={(prev) => ({ ...prev, page: page - 1 })}
           className="cursor-pointer rounded bg-gray-700 px-3 py-2 hover:bg-gray-600"
         >
@@ -27,7 +27,7 @@ export function Pagination({ maxPages }: { maxPages: number }) {
         </span>
       ) : (
         <Link
-          to="/"
+          from="/"
           search={(prev) => ({ ...prev, page: page + 1 })}
           className="cursor-pointer rounded bg-gray-700 px-3 py-2 hover:bg-gray-600"
         >
