@@ -39,7 +39,6 @@ function App() {
 
 function BookSearchOverview() {
   const { page, filter } = Route.useSearch()
-  const navigate = Route.useNavigate()
   const queryClient = useQueryClient()
   const query = useQuery({
     ...bookQueries.list({ filter, page }),
@@ -83,13 +82,7 @@ function BookSearchOverview() {
         ))}
       </div>
 
-      <Pagination
-        page={page}
-        setPage={(newPage) => {
-          void navigate({ search: (prev) => ({ ...prev, page: newPage }) })
-        }}
-        maxPages={Math.ceil(query.data.numFound / limit)}
-      />
+      <Pagination maxPages={Math.ceil(query.data.numFound / limit)} />
     </div>
   )
 }
