@@ -1,7 +1,7 @@
 import { Search } from 'lucide-react'
 
 type Props = {
-  defaultValue: string
+  defaultValue: string | undefined
   onSearch: (query: string) => void
 }
 
@@ -17,6 +17,8 @@ export function SearchForm({ defaultValue, onSearch }: Props) {
       className="flex w-full items-center space-x-2 lg:w-auto"
     >
       <input
+        autoFocus
+        key={defaultValue}
         defaultValue={defaultValue}
         autoComplete="off"
         name="search"
