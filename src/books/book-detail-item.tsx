@@ -1,6 +1,6 @@
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { CoverImage } from '@/ui-components/cover-image'
+import { CoverImage } from '@/books/cover-image'
 import type { Author, BookDetailItem } from '@/api/openlibrary'
 
 type Props = Omit<BookDetailItem, 'authorId'> & {
