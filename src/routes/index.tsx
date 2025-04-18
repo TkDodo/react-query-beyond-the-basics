@@ -19,7 +19,7 @@ export const Route = createFileRoute('/')({
 })
 
 function App() {
-  const [search, setSearch] = useState('')
+  const [filter, setFilter] = useState('')
   const [page, setPage] = useState(1)
   const [id, setId] = useState<string>()
 
@@ -27,7 +27,7 @@ function App() {
     return (
       <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
         <Header />
-        <BookDetail id={id} setId={setId} search={search} page={page} />
+        <BookDetail id={id} setId={setId} filter={filter} page={page} />
       </div>
     )
   }
@@ -35,11 +35,11 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
       <Header>
-        <SearchForm onSearch={setSearch} defaultValue={search} />
+        <SearchForm onSearch={setFilter} defaultValue={filter} />
       </Header>
-      {search ? (
+      {filter ? (
         <BookSearchOverview
-          search={search}
+          filter={filter}
           setId={setId}
           page={page}
           setPage={setPage}
@@ -55,18 +55,18 @@ function BookSearchOverview({
   page,
   setPage,
   setId,
-  search,
+  filter,
 }: {
-  search: string
+  filter: string
   setId: (id: string) => void
   page: number
   setPage: (page: number) => void
 }) {
   const queryClient = useQueryClient()
   const query = useQuery({
-    ...bookQueries.list({ search, page }),
+    ...bookQueries.list({ filter, page }),
     placeholderData: (previousData, previousQuery) =>
-      previousQuery?.queryHash.includes(search) ? previousData : undefined,
+      previousQuery?.queryHash.includes(filter) ? previousData : undefined,
   })
 
   if (query.status === 'pending') {
@@ -118,11 +118,11 @@ function BookSearchOverview({
 function BookDetail({
   setId,
   id,
-  search,
+  filter,
   page,
 }: {
   id: string
-  search: string
+  filter: string
   page: number
   setId: (id: string | undefined) => void
 }) {
@@ -131,7 +131,7 @@ function BookDetail({
     ...bookQueries.detail(id),
     placeholderData: () => {
       const listData = queryClient
-        .getQueryData(bookQueries.list({ search, page }).queryKey)
+        .getQueryData(bookQueries.list({ filter, page }).queryKey)
         ?.docs.find((book) => book.id === id)
 
       return listData
@@ -150,7 +150,7 @@ function BookDetail({
     ...bookQueries.author(authorId),
     placeholderData: () => {
       const listData = queryClient
-        .getQueryData(bookQueries.list({ search, page }).queryKey)
+        .getQueryData(bookQueries.list({ filter, page }).queryKey)
         ?.docs.find((book) => book.id === id)
 
       return listData?.authorName
