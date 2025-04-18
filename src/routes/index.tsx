@@ -19,7 +19,7 @@ export const Route = createFileRoute('/')({
 })
 
 function App() {
-  const [search, setSearch] = useState('')
+  const [filter, setFilter] = useState('')
   const [page, setPage] = useState(1)
   const [id, setId] = useState<string>()
 
@@ -35,11 +35,11 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
       <Header>
-        <SearchForm onSearch={setSearch} defaultValue={search} />
+        <SearchForm onSearch={setFilter} defaultValue={filter} />
       </Header>
-      {search ? (
+      {filter ? (
         <BookSearchOverview
-          search={search}
+          filter={filter}
           setId={setId}
           page={page}
           setPage={setPage}
@@ -55,15 +55,15 @@ function BookSearchOverview({
   page,
   setPage,
   setId,
-  search,
+  filter,
 }: {
-  search: string
+  filter: string
   setId: (id: string) => void
   page: number
   setPage: (page: number) => void
 }) {
   const queryClient = useQueryClient()
-  const query = useQuery(bookQueries.list({ search, page }))
+  const query = useQuery(bookQueries.list({ filter, page }))
 
   if (query.status === 'pending') {
     return <PendingState />
