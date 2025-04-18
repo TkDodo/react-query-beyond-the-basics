@@ -1,4 +1,8 @@
-import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
+import {
+  Outlet,
+  createRootRouteWithContext,
+  stripSearchParams,
+} from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -20,6 +24,9 @@ const arkSchema = type({
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   validateSearch: arkSchema,
+  search: {
+    middlewares: [stripSearchParams({ page: 1, filter: '' })],
+  },
   component: () => (
     <>
       <Outlet />
