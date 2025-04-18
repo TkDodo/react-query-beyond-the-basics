@@ -24,7 +24,7 @@ export const Route = createFileRoute('/')({
 })
 
 function App() {
-  const { filter } = Route.useSearch()
+  const filter = Route.useSearch({ select: (search) => search.filter })
   const navigate = Route.useNavigate()
 
   return (
