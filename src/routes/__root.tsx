@@ -2,6 +2,7 @@ import {
   Outlet,
   createRootRouteWithContext,
   retainSearchParams,
+  stripSearchParams,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { QueryClient } from '@tanstack/react-query'
@@ -12,15 +13,23 @@ interface RouterContext {
   queryClient: QueryClient
 }
 
+const defaultValues = {
+  page: 1,
+  filter: '',
+} as const
+
 const schema = type({
-  page: 'number = 1',
-  filter: 'string = ""',
+  page: `number = ${defaultValues.page}`,
+  filter: `string = "${defaultValues.filter}"`,
 })
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   validateSearch: schema,
   search: {
-    middlewares: [retainSearchParams(['filter', 'page'])],
+    middlewares: [
+      stripSearchParams(defaultValues),
+      retainSearchParams(['page', 'filter']),
+    ],
   },
   component: () => (
     <>

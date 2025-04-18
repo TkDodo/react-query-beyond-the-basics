@@ -17,7 +17,7 @@ export const Route = createFileRoute('/')({
 })
 
 function App() {
-  const { page, filter } = Route.useSearch()
+  const { filter } = Route.useSearch()
   const navigate = Route.useNavigate()
 
   return (
@@ -32,22 +32,13 @@ function App() {
           defaultValue={filter}
         />
       </Header>
-      {filter ? (
-        <BookSearchOverview filter={filter} page={page} />
-      ) : (
-        <EmptyState />
-      )}
+      {filter ? <BookSearchOverview /> : <EmptyState />}
     </div>
   )
 }
 
-function BookSearchOverview({
-  page,
-  filter,
-}: {
-  filter: string
-  page: number
-}) {
+function BookSearchOverview() {
+  const { page, filter } = Route.useSearch()
   const navigate = Route.useNavigate()
   const queryClient = useQueryClient()
   const query = useQuery({
