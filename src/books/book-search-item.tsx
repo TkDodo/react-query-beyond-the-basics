@@ -1,4 +1,4 @@
-import { CoverImage } from '@/ui-components/cover-image'
+import { CoverImage } from '@/books/cover-image'
 import type { BookSearchItem } from '@/api/openlibrary'
 
 type Props = BookSearchItem &
