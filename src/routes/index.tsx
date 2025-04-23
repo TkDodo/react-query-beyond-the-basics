@@ -83,7 +83,7 @@ function BookSearchOverview({
   return (
     <div>
       <div className="mb-4 flex justify-end text-sm text-gray-400">
-        {query.data.numFound.toString()} records found
+        {query.data.numFound} records found
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
