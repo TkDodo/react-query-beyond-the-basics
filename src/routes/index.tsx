@@ -1,65 +1,42 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { SearchForm } from '@/books/search-form'
-import { Header } from '@/books/header'
 import { Pagination } from '@/books/pagination'
 import { BookSearchItem } from '@/books/book-search-item'
 import { bookQueries, limit } from '@/api/openlibrary'
-import { useQuery } from '@tanstack/react-query'
-import {
-  EmptyState,
-  ErrorState,
-  NoResultsState,
-  PendingState,
-} from '@/books/search-states'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { EmptyState, NoResultsState, PendingState } from '@/books/search-states'
+import { useDeferredValue } from 'react'
 
 export const Route = createFileRoute('/')({
   loaderDeps: ({ search }) => search,
   context: ({ deps }) => ({
-    bookListQuery: bookQueries.list(deps),
+    bookListQuery: (
+      params?: Partial<Parameters<(typeof bookQueries)['list']>[0]>,
+    ) =>
+      bookQueries.list({
+        ...deps,
+        ...params,
+      }),
   }),
   loader: ({ context }) => {
-    void context.queryClient.prefetchQuery(context.bookListQuery)
+    void context.queryClient.prefetchQuery(context.bookListQuery())
   },
   component: App,
+  pendingComponent: PendingState,
 })
 
 function App() {
   const filter = Route.useSearch({ select: (search) => search.filter })
-  const navigate = Route.useNavigate()
 
-  return (
-    <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
-      <Header>
-        <SearchForm
-          onSearch={(newFilter) => {
-            void navigate({
-              search: { filter: newFilter, page: 1 },
-            })
-          }}
-          defaultValue={filter}
-        />
-      </Header>
-      {filter ? <BookSearchOverview /> : <EmptyState />}
-    </div>
-  )
+  return filter ? <BookSearchOverview /> : <EmptyState />
 }
 
 function BookSearchOverview() {
-  const { filter } = Route.useSearch()
+  const { page } = Route.useSearch()
+  const deferredPage = useDeferredValue(page)
+  const isPlaceholderData = page !== deferredPage
   const { bookListQuery } = Route.useRouteContext()
-  const query = useQuery({
-    ...bookListQuery,
-    placeholderData: (previousData, previousQuery) =>
-      previousQuery?.queryHash.includes(filter) ? previousData : undefined,
-  })
 
-  if (query.status === 'pending') {
-    return <PendingState />
-  }
-
-  if (query.status === 'error') {
-    return <ErrorState error={query.error} />
-  }
+  const query = useSuspenseQuery(bookListQuery({ page: deferredPage }))
 
   if (query.data.numFound === 0) {
     return <NoResultsState />
@@ -73,7 +50,7 @@ function BookSearchOverview() {
 
       <div
         className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-        style={{ opacity: query.isPlaceholderData ? 0.5 : 1 }}
+        style={{ opacity: isPlaceholderData ? 0.5 : 1 }}
       >
         {query.data.docs.map((book) => (
           <BookSearchItem key={book.id} {...book} />

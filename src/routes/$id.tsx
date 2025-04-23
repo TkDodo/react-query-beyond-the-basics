@@ -1,15 +1,16 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Header } from '@/books/header'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { bookQueries } from '@/api/openlibrary'
-import { ErrorState, PendingState } from '@/books/search-states'
 import { BookDetailItem } from '@/books/book-detail-item'
+import { use } from 'react'
+import { PendingState } from '@/books/search-states'
 
 export const Route = createFileRoute('/$id')({
   loader: ({ params, context }) => {
     void context.queryClient.prefetchQuery(bookQueries.detail(params.id))
   },
   component: BookDetail,
+  pendingComponent: PendingState,
 })
 
 function BookDetail() {
@@ -53,18 +54,7 @@ function BookDetail() {
     },
   })
 
-  if (bookQuery.status === 'pending') {
-    return <PendingState />
-  }
+  const data = bookQuery.data ? bookQuery.data : use(bookQuery.promise)
 
-  if (bookQuery.status === 'error') {
-    return <ErrorState error={bookQuery.error} />
-  }
-
-  return (
-    <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
-      <Header />
-      <BookDetailItem {...bookQuery.data} author={authorQuery.data} />
-    </div>
-  )
+  return <BookDetailItem {...data} author={authorQuery.data} />
 }
