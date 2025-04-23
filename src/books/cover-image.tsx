@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 type Props = {
-  id: string
+  id: number
   title: string
   size?: 'L' | 'M'
 }

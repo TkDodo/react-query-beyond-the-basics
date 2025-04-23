@@ -28,7 +28,6 @@ export default tseslint.config(
       },
     },
     rules: {
-      'unicorn/prevent-abbreviations': 'off',
       '@typescript-eslint/no-misused-promises': [
         'error',
         {
@@ -47,7 +46,7 @@ export default tseslint.config(
           ignoreRestSiblings: true,
         },
       ],
-      '@typescript-eslint/ restrict-template-expressions': [
+      '@typescript-eslint/restrict-template-expressions': [
         'error',
         { allowNumber: true },
       ],
