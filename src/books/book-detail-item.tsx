@@ -50,8 +50,8 @@ export function BookDetailItem({
 
         {covers.length > 0 && (
           <div className="mb-6 flex space-x-4">
-            {covers.slice(0, 5).map((src) => (
-              <CoverImage key={src} id={String(src)} title={title} />
+            {covers.slice(0, 5).map((cover) => (
+              <CoverImage key={cover} id={cover} title={title} />
             ))}
           </div>
         )}
