@@ -37,7 +37,7 @@ const router = createRouter({
   defaultPreloadStaleTime: 0,
   defaultGcTime: 0,
   defaultPendingMinMs: 0,
-  defaultPendingMs: 0,
+  defaultPendingMs: 100,
   defaultErrorComponent: ErrorState,
   defaultPendingComponent: PendingState,
 })
