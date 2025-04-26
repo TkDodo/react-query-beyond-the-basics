@@ -3,14 +3,12 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { bookQueries } from '@/api/openlibrary'
 import { BookDetailItem } from '@/books/book-detail-item'
 import { use } from 'react'
-import { PendingState } from '@/books/search-states'
 
 export const Route = createFileRoute('/$id')({
   loader: ({ params, context }) => {
     void context.queryClient.prefetchQuery(bookQueries.detail(params.id))
   },
   component: BookDetail,
-  pendingComponent: PendingState,
 })
 
 function BookDetail() {

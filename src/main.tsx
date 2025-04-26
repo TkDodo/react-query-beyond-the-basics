@@ -14,7 +14,7 @@ import {
 } from '@tanstack/react-query'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
-import { ErrorState } from '@/books/search-states'
+import { ErrorState, PendingState } from '@/books/search-states'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,6 +39,7 @@ const router = createRouter({
   defaultPendingMinMs: 0,
   defaultPendingMs: 0,
   defaultErrorComponent: ErrorState,
+  defaultPendingComponent: PendingState,
 })
 
 // Register the router instance for type safety
