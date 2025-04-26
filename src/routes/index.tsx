@@ -173,11 +173,11 @@ function BookDetail({
   return (
     <div>
       <BookDetailItem
+        {...bookQuery.data}
+        author={authorQuery.data}
         onBack={() => {
           setId(undefined)
         }}
-        {...bookQuery.data}
-        author={authorQuery.data}
       />
     </div>
   )
