@@ -22,7 +22,7 @@ const router = createRouter({
   defaultPreloadStaleTime: 0,
   defaultGcTime: 0,
   defaultPendingMinMs: 0,
-  defaultPendingMs: 0,
+  defaultPendingMs: 100,
 })
 
 // Register the router instance for type safety
