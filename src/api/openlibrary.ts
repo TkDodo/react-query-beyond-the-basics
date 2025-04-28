@@ -102,13 +102,11 @@ export const bookQueries = {
     queryOptions({
       queryKey: [...bookQueries.all(), 'list', params],
       queryFn: () => getBooks(params),
-      staleTime: 2 * 60 * 1000,
     }),
   detail: (bookId: string) =>
     queryOptions({
       queryKey: [...bookQueries.all(), 'detail', bookId],
       queryFn: () => getBook(bookId),
-      staleTime: 2 * 60 * 1000,
     }),
   author: (authorId: string | undefined) =>
     queryOptions({
