@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { RouterProvider, createRouter } from '@tanstack/react-router'
-import { get, set, del } from 'idb-keyval'
+import { createRouter, RouterProvider } from '@tanstack/react-router'
+import { del, get, set } from 'idb-keyval'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
@@ -14,6 +14,7 @@ import {
 } from '@tanstack/react-query'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
+import { bookQueries } from '@/api/openlibrary'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,6 +23,8 @@ const queryClient = new QueryClient({
     },
   },
 })
+
+queryClient.setQueryDefaults(bookQueries.all(), { staleTime: 2 * 60 * 1000 })
 
 // Create a new router instance
 const router = createRouter({
