@@ -47,7 +47,6 @@ function BookDetail() {
       return listData?.authorName
         ? {
             name: listData.authorName,
-            link: undefined,
           }
         : undefined
     },
