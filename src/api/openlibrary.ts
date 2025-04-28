@@ -93,10 +93,12 @@ export async function getAuthor(id: string) {
 
   await sleep(1000)
 
+  const link = response.links?.map((link) => ({
+    url: link.url,
+  }))[0]?.url
+
   return {
     name: response.personal_name,
-    link: response.links?.map((link) => ({
-      url: link.url,
-    }))[0]?.url,
+    ...(link ? { link } : undefined),
   }
 }
