@@ -49,8 +49,8 @@ function BookSearchOverview() {
   const { bookListQuery } = Route.useRouteContext()
   const query = useQuery({
     ...bookListQuery,
-    placeholderData: (previousData, previousQuery) =>
-      previousQuery?.queryHash.includes(filter) ? previousData : undefined,
+    placeholderData: (previousData) =>
+      previousData?.filter === filter ? previousData : undefined,
   })
 
   if (query.status === 'pending') {
