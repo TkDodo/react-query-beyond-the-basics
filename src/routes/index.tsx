@@ -65,8 +65,8 @@ function BookSearchOverview({
   const queryClient = useQueryClient()
   const query = useQuery({
     ...bookQueries.list({ filter, page }),
-    placeholderData: (previousData, previousQuery) =>
-      previousQuery?.queryHash.includes(filter) ? previousData : undefined,
+    placeholderData: (previousData) =>
+      previousData?.filter === filter ? previousData : undefined,
   })
 
   if (query.status === 'pending') {
