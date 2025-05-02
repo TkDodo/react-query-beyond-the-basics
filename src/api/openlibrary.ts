@@ -22,10 +22,11 @@ export async function getBooks({
     has_fulltext: 'true',
     fields: 'key,title,author_name,author_key,first_publish_year,cover_i',
   })
-  const response = await ky
+  const { q, ...response } = await ky
     .get(`https://openlibrary.org/search.json?${params.toString()}`)
     .json<{
       numFound: number
+      q: string
       docs: Array<{
         key: string
         title: string
@@ -41,6 +42,7 @@ export async function getBooks({
 
   return {
     ...response,
+    filter: q,
     docs: response.docs.map((doc) => ({
       id: doc.key,
       coverId: doc.cover_i,
