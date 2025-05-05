@@ -9,9 +9,7 @@ import { useDeferredValue } from 'react'
 export const Route = createFileRoute('/')({
   loaderDeps: ({ search }) => search,
   context: ({ deps }) => ({
-    bookListQuery: (
-      params?: Partial<Parameters<(typeof bookQueries)['list']>[0]>,
-    ) =>
+    bookListQuery: (params?: Partial<typeof deps>) =>
       bookQueries.list({
         ...deps,
         ...params,
