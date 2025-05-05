@@ -36,7 +36,7 @@ declare module '@tanstack/react-router' {
 const rootElement = document.querySelector('#app')
 if (rootElement && !rootElement.innerHTML) {
   const root = createRoot(rootElement)
-  // await (await import('@/server/handlers')).worker.start()
+  await (await import('@/server/handlers')).worker.start()
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
