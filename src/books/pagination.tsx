@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { getRouteApi, Link } from '@tanstack/react-router'
+import { getRouteApi } from '@tanstack/react-router'
 
 const routeApi = getRouteApi('/')
 
@@ -12,13 +12,12 @@ export function Pagination({ maxPages }: { maxPages: number }) {
           <ChevronLeft className="h-4 w-4" />
         </span>
       ) : (
-        <Link
-          from="/"
+        <routeApi.Link
           search={(prev) => ({ ...prev, page: page - 1 })}
           className="cursor-pointer rounded bg-gray-700 px-3 py-2 hover:bg-gray-600"
         >
           <ChevronLeft className="h-4 w-4" />
-        </Link>
+        </routeApi.Link>
       )}
       <span className="inline-block w-16 text-center">Page {page}</span>
       {page === maxPages ? (
@@ -26,13 +25,12 @@ export function Pagination({ maxPages }: { maxPages: number }) {
           <ChevronRight className="h-4 w-4" />
         </span>
       ) : (
-        <Link
-          from="/"
+        <routeApi.Link
           search={(prev) => ({ ...prev, page: page + 1 })}
           className="cursor-pointer rounded bg-gray-700 px-3 py-2 hover:bg-gray-600"
         >
           <ChevronRight className="h-4 w-4" />
-        </Link>
+        </routeApi.Link>
       )}
     </div>
   )
