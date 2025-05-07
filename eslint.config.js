@@ -4,6 +4,7 @@ import tseslint, { configs } from 'typescript-eslint'
 import reactHooks from 'eslint-plugin-react-hooks'
 import eslintReact from '@eslint-react/eslint-plugin'
 import pluginQuery from '@tanstack/eslint-plugin-query'
+import pluginRouter from '@tanstack/eslint-plugin-router'
 import * as pluginImportX from 'eslint-plugin-import-x'
 // eslint-disable-next-line import-x/default
 import tsParser from '@typescript-eslint/parser'
@@ -12,6 +13,7 @@ export default tseslint.config(
   eslint.configs.recommended,
   configs.strictTypeChecked,
   pluginQuery.configs['flat/recommended'],
+  pluginRouter.configs['flat/recommended'],
   eslintReact.configs['recommended-type-checked'],
   reactHooks.configs['recommended-latest'],
   pluginImportX.flatConfigs.recommended,
