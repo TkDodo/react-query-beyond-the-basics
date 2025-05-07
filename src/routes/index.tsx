@@ -25,7 +25,7 @@ function App() {
 
   if (id) {
     return (
-      <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
+      <div>
         <Header />
         <BookDetail id={id} setId={setId} filter={filter} page={page} />
       </div>
@@ -33,7 +33,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
+    <div>
       <Header>
         <SearchForm onSearch={setFilter} defaultValue={filter} />
       </Header>
