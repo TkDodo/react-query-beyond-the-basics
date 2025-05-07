@@ -61,7 +61,7 @@ function BookDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
+    <div>
       <Header />
       <BookDetailItem {...bookQuery.data} author={authorQuery.data} />
     </div>
