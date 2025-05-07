@@ -15,6 +15,7 @@ export function Pagination({ maxPages }: { maxPages: number }) {
         <routeApi.Link
           search={(prev) => ({ ...prev, page: page - 1 })}
           className="cursor-pointer rounded bg-gray-700 px-3 py-2 hover:bg-gray-600"
+          resetScroll={false}
         >
           <ChevronLeft className="h-4 w-4" />
         </routeApi.Link>
@@ -28,6 +29,7 @@ export function Pagination({ maxPages }: { maxPages: number }) {
         <routeApi.Link
           search={(prev) => ({ ...prev, page: page + 1 })}
           className="cursor-pointer rounded bg-gray-700 px-3 py-2 hover:bg-gray-600"
+          resetScroll={false}
         >
           <ChevronRight className="h-4 w-4" />
         </routeApi.Link>
