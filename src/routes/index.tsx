@@ -35,7 +35,15 @@ function App() {
   return (
     <div>
       <Header>
-        <SearchForm onSearch={setFilter} defaultValue={filter} />
+        <SearchForm
+          onSearch={(newFilter) => {
+            if (filter !== newFilter) {
+              setFilter(newFilter)
+              setPage(1)
+            }
+          }}
+          defaultValue={filter}
+        />
       </Header>
       {filter ? (
         <BookSearchOverview
