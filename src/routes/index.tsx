@@ -32,9 +32,11 @@ function App() {
       <Header>
         <SearchForm
           onSearch={(newFilter) => {
-            void navigate({
-              search: { filter: newFilter, page: 1 },
-            })
+            if (filter !== newFilter) {
+              void navigate({
+                search: { filter: newFilter, page: 1 },
+              })
+            }
           }}
           defaultValue={filter}
         />
