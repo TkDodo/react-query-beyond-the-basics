@@ -19,12 +19,14 @@ const arkSchema = type({
 // })
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-  validateSearch: arkSchema,
-  component: () => (
-    <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
-      <Outlet />
-      <TanStackRouterDevtools />
-      <ReactQueryDevtools />
-    </div>
-  ),
+    validateSearch: arkSchema,
+    component: function Root() {
+    return (
+      <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
+        <Outlet />
+        <TanStackRouterDevtools />
+        <ReactQueryDevtools />
+      </div>
+    )
+  },
 })
