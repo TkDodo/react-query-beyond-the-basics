@@ -26,7 +26,7 @@ const arkSchema = type({
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   validateSearch: arkSchema,
-  component: function App() {
+  component: function Root() {
     const filter = Route.useSearch({ select: (search) => search.filter })
     const navigate = Route.useNavigate()
     const isOnIndexRoute = !!useMatch({ from: '/', shouldThrow: false })
