@@ -8,12 +8,12 @@ interface RouterContext {
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-    component: function Root() {
+  component: function Root() {
     return (
       <div className="min-h-screen bg-gray-900 p-6 text-gray-100">
         <Outlet />
-        <TanStackRouterDevtools />
-        <ReactQueryDevtools />
+        <TanStackRouterDevtools position="bottom-right" />
+        <ReactQueryDevtools buttonPosition="bottom-left" />
       </div>
     )
   },
