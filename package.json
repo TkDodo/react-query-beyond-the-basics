@@ -13,10 +13,10 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.6",
-    "@tanstack/query-async-storage-persister": "^5.75.4",
-    "@tanstack/react-query": "^5.75.4",
-    "@tanstack/react-query-devtools": "^5.75.4",
-    "@tanstack/react-query-persist-client": "^5.75.4",
+    "@tanstack/query-async-storage-persister": "^5.90.2",
+    "@tanstack/react-query": "^5.90.2",
+    "@tanstack/react-query-devtools": "^5.90.2",
+    "@tanstack/react-query-persist-client": "^5.90.2",
     "@tanstack/react-router": "^1.120.2",
     "@tanstack/react-router-devtools": "^1.120.2",
     "@tanstack/router-plugin": "^1.120.2",
@@ -34,7 +34,7 @@
   "devDependencies": {
     "@eslint-react/eslint-plugin": "^1.47.2",
     "@eslint/js": "^9.24.0",
-    "@tanstack/eslint-plugin-query": "^5.74.7",
+    "@tanstack/eslint-plugin-query": "^5.91.0",
     "@tanstack/eslint-plugin-router": "^1.115.0",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
