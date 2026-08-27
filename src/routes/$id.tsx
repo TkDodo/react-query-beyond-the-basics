@@ -1,8 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { Header } from '@/books/header'
 import { noop, useQuery, useQueryClient } from '@tanstack/react-query'
 import { bookQueries } from '@/api/openlibrary'
+import { ErrorState, PendingState } from '@/books/search-states'
 import { BookDetailItem } from '@/books/book-detail-item'
-import { use } from 'react'
 
 export const Route = createFileRoute('/$id')({
   loader: ({ params, context }) => {
@@ -51,7 +52,18 @@ function BookDetail() {
     },
   })
 
-  const data = bookQuery.data ? bookQuery.data : use(bookQuery.promise)
+  if (bookQuery.status === 'pending') {
+    return <PendingState />
+  }
 
-  return <BookDetailItem {...data} author={authorQuery.data} />
+  if (bookQuery.status === 'error') {
+    return <ErrorState error={bookQuery.error} />
+  }
+
+  return (
+    <div>
+      <Header />
+      <BookDetailItem {...bookQuery.data} author={authorQuery.data} />
+    </div>
+  )
 }
