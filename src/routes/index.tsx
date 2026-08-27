@@ -6,7 +6,7 @@ import { Pagination } from '@/books/pagination'
 import { BookSearchItem } from '@/books/book-search-item'
 import { BookDetailItem } from '@/books/book-detail-item'
 import { bookQueries, limit } from '@/api/openlibrary'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { noop, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   EmptyState,
   ErrorState,
@@ -98,10 +98,10 @@ function BookSearchOverview({
             {...book}
             onClick={setId}
             onMouseEnter={() => {
-              void queryClient.prefetchQuery(bookQueries.detail(book.id))
+              void queryClient.query(bookQueries.detail(book.id)).catch(noop)
             }}
             onFocus={() => {
-              void queryClient.prefetchQuery(bookQueries.detail(book.id))
+              void queryClient.query(bookQueries.detail(book.id)).catch(noop)
             }}
           />
         ))}
