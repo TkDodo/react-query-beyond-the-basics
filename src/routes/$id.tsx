@@ -1,13 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Header } from '@/books/header'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { noop, useQuery, useQueryClient } from '@tanstack/react-query'
 import { bookQueries } from '@/api/openlibrary'
 import { ErrorState, PendingState } from '@/books/search-states'
 import { BookDetailItem } from '@/books/book-detail-item'
 
 export const Route = createFileRoute('/$id')({
   loader: ({ params, context }) => {
-    void context.queryClient.prefetchQuery(bookQueries.detail(params.id))
+    void context.queryClient.query(bookQueries.detail(params.id)).catch(noop)
   },
   component: BookDetail,
 })

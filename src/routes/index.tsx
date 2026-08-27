@@ -4,7 +4,7 @@ import { Header } from '@/books/header'
 import { Pagination } from '@/books/pagination'
 import { BookSearchItem } from '@/books/book-search-item'
 import { bookQueries, limit } from '@/api/openlibrary'
-import { useQuery } from '@tanstack/react-query'
+import { noop, useQuery } from '@tanstack/react-query'
 import {
   EmptyState,
   ErrorState,
@@ -18,7 +18,7 @@ export const Route = createFileRoute('/')({
     bookListQuery: bookQueries.list(deps),
   }),
   loader: ({ context }) => {
-    void context.queryClient.prefetchQuery(context.bookListQuery)
+    void context.queryClient.query(context.bookListQuery).catch(noop)
   },
   component: App,
 })
