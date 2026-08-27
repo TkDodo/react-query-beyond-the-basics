@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Pagination } from '@/books/pagination'
 import { BookSearchItem } from '@/books/book-search-item'
 import { bookQueries, limit } from '@/api/openlibrary'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { noop, useSuspenseQuery } from '@tanstack/react-query'
 import { EmptyState, NoResultsState } from '@/books/search-states'
 import { useDeferredValue } from 'react'
 
@@ -16,7 +16,7 @@ export const Route = createFileRoute('/')({
       }),
   }),
   loader: ({ context }) => {
-    void context.queryClient.prefetchQuery(context.bookListQuery())
+    void context.queryClient.query(context.bookListQuery()).catch(noop)
   },
   component: App,
 })
