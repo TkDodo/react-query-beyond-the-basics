@@ -60,10 +60,5 @@ function BookDetail() {
     return <ErrorState error={bookQuery.error} />
   }
 
-  return (
-    <div>
-      <Header />
-      <BookDetailItem {...bookQuery.data} author={authorQuery.data} />
-    </div>
-  )
+  return <BookDetailItem {...bookQuery.data} author={authorQuery.data} />
 }
