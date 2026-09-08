@@ -17,6 +17,9 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
   },
+  build: {
+    target: 'es2022'
+  },
 
   resolve: {
     alias: {
